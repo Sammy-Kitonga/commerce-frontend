@@ -76,7 +76,7 @@ export default function CheckoutPage() {
                 <div key={idx} className="flex justify-between items-center py-4 border-b border-gray-800 last:border-0 group">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-[#0d0d0d] rounded-lg flex items-center justify-center overflow-hidden">
-                       {item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" /> : <ShoppingBag size={16} className="text-gray-600"/>}
+                       {item.imageURL ? <img src={item.imageURL} alt={item.name} className="w-full h-full object-cover" /> : <ShoppingBag size={16} className="text-gray-600"/>}
                     </div>
                     <span className="font-medium text-gray-200">{item.name}</span>
                   </div>
