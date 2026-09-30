@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -127,4 +132,9 @@
   html {
     @apply font-sans;
   }
+}
+
+body{
+  background-color: #0d0d0d;  
+  color: #ffffff;
 }
