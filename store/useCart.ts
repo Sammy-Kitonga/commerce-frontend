@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface Product{id:string; name:string; price:number;imageURL:string}
+export interface Product{id:string; name:string; price:number;imageURL:string}
 interface CartStore{
     items: Product[]
     add:(p:Product)=> void;

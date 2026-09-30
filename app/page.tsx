@@ -1,34 +1,70 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useProducts } from '@/store/useProduct';
 import { useCart } from '@/store/useCart';
-import { Heart, Star, ChevronDown, X } from "lucide-react";
-import Link from 'next/link';
-import { Menu,Search } from 'lucide-react';
+import { useWishlist } from '@/store/useWishlist';
+import { Heart, Star, ChevronDown, X, Search, Menu } from "lucide-react";
 
 export default function Home() {
   const { products, loading, fetchProducts } = useProducts();
   const { add } = useCart();
+  const { toggle: toggleWishlist, isInWishlist } = useWishlist();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
+
+  const toggleBrand = (brand: string) => {
+    setSelectedBrands(prev => 
+      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
+    );
+  };
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedBrands([]);
+  };
+
+  const filteredProducts = products.filter(product => {
+    const productName = product.name.toLowerCase();
+    const productDesc = (product.description || "").toLowerCase();
+    
+    const matchesSearch = productName.includes(searchQuery.toLowerCase()) || 
+                          productDesc.includes(searchQuery.toLowerCase());
+    
+    const matchesBrand = selectedBrands.length === 0 || 
+                         selectedBrands.some(brand => 
+                           productName.includes(brand.toLowerCase()) || 
+                           productDesc.includes(brand.toLowerCase())
+                         );
+    
+    return matchesSearch && matchesBrand;
+  });
+
+  const availableBrands = ['Apple', 'LG', 'KitchenAid', 'SMEG', 'Samsung', 'Sony', 'Remez'];
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-8 flex gap-12 font-sans text-white">
       
       <aside className="w-64 flex-shrink-0 hidden lg:block">
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-gray-400 mb-6 cursor-pointer hover:text-white">
+          <button onClick={resetFilters} className="flex items-center gap-2 text-sm text-gray-400 mb-6 cursor-pointer hover:text-white transition-colors">
             <X size={16} /> Reset filters
-          </div>
+          </button>
           
           <div className="flex flex-wrap gap-2 mb-8">
-            {['Apple', 'SMEG', 'Remez', 'Home Appliances', 'Kitchen Appliances'].map(tag => (
-              <span key={tag} className="bg-[#1a1a1a] border border-gray-800 text-gray-300 text-xs px-3 py-1.5 rounded-full flex items-center gap-2">
-                {tag} <X size={12} className="cursor-pointer hover:text-white" />
-              </span>
+            {selectedBrands.map(tag => (
+              <button 
+                key={tag} 
+                onClick={() => toggleBrand(tag)}
+                className="bg-[#1a1a1a] border border-gray-800 text-gray-300 text-xs px-3 py-1.5 rounded-full flex items-center gap-2 hover:bg-gray-800 transition-colors"
+              >
+                {tag} <X size={12} />
+              </button>
             ))}
           </div>
         </div>
@@ -46,23 +82,28 @@ export default function Home() {
             </div>
             
             <div className="relative mb-4">
-              <Search size={14} className="absolute left-3 top-2.5 text-gray-500" />
+              <Search size={14} className="absolute left-3 top-3 text-gray-500" />
               <input 
                 type="text" 
-                placeholder="Search brands" 
+                placeholder="Search catalog..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-[#1a1a1a] border border-gray-800 rounded-full py-2 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-gray-600"
               />
             </div>
 
             <div className="space-y-3">
-              {['Apple', 'LG', 'KitchenAid', 'SMEG', 'Samsung', 'Sony', 'Remez'].map((brand, i) => (
-                <label key={brand} className="flex items-center gap-3 cursor-pointer group">
-                  <div className={`w-5 h-5 rounded flex items-center justify-center border ${[0, 3, 6].includes(i) ? 'bg-[#d4ff00] border-[#d4ff00]' : 'border-gray-600 group-hover:border-gray-400'}`}>
-                    {[0, 3, 6].includes(i) && <X size={14} className="text-black" />} 
+              {availableBrands.map((brand) => {
+                const isSelected = selectedBrands.includes(brand);
+                return (
+                  <div key={brand} onClick={() => toggleBrand(brand)} className="flex items-center gap-3 cursor-pointer group select-none">
+                    <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${isSelected ? 'bg-[#d4ff00] border-[#d4ff00]' : 'border-gray-600 group-hover:border-gray-400'}`}>
+                      {isSelected && <X size={14} className="text-black" />}
+                    </div>
+                    <span className="text-gray-300 text-sm">{brand}</span>
                   </div>
-                  <span className="text-gray-300 text-sm">{brand}</span>
-                </label>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -78,11 +119,7 @@ export default function Home() {
               <button className="text-[#d4ff00] border-b-2 border-[#d4ff00] pb-4 -mb-[17px]">All items</button>
               <button className="text-gray-400 hover:text-white pb-4">Smartphones</button>
               <button className="text-gray-400 hover:text-white pb-4">Kitchen</button>
-              <button className="text-gray-400 hover:text-white pb-4">Game Console</button>
             </div>
-            <button className="flex items-center gap-2 border border-gray-800 rounded-full px-4 py-2 text-sm text-gray-300 hover:bg-[#1a1a1a]">
-              <Menu size={16} /> Top rated
-            </button>
           </div>
         </div>
 
@@ -91,13 +128,22 @@ export default function Home() {
             [1, 2, 3, 4, 5, 6].map((n) => (
               <div key={n} className="h-80 bg-[#1a1a1a] rounded-3xl animate-pulse" />
             ))
+          ) : filteredProducts.length === 0 ? (
+            <div className="col-span-full py-12 text-center text-gray-400">
+              No products match your filters.
+            </div>
           ) : (
-            products.map((product) => (
+            filteredProducts.map((product) => (
               <div key={product.id} className="bg-[#1a1a1a] rounded-3xl p-5 relative group flex flex-col cursor-pointer hover:bg-[#222] transition">
+                
                 <div className="flex justify-between items-start mb-4 z-10">
-                  <span className="bg-[#d4ff00] text-black text-xs font-bold px-2 py-1 rounded">Sale 15%</span>
-                  <button className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition">
-                    <Heart size={18} />
+                  <span className="bg-[#d4ff00] text-black text-xs font-bold px-2 py-1 rounded">Sale</span>
+                  
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); toggleWishlist(product); }}
+                    className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition"
+                  >
+                    <Heart size={18} className={isInWishlist(product.id) ? "fill-[#d4ff00] text-[#d4ff00]" : ""} />
                   </button>
                 </div>
                 
@@ -117,9 +163,8 @@ export default function Home() {
                   
                   <div className="flex items-baseline gap-3 mb-1">
                     <span className="text-2xl font-bold">KES {product.price}</span>
-                    <span className="text-sm text-gray-500 line-through">KES {(product.price * 1.15).toFixed(2)}</span>
                   </div>
-                  <p className="text-gray-400 text-sm">{product.name}</p>
+                  <p className="text-gray-400 text-sm line-clamp-2">{product.name}</p>
                 </div>
 
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl flex items-center justify-center backdrop-blur-sm">
