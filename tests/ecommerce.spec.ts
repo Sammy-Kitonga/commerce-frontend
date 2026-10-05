@@ -45,8 +45,8 @@ test('Checkout flow and payment UI',async({page})=>{
     await expect(page.getByRole('heading',{name:'Checkout'})).toBeVisible()
 
     const phoneInput=page.getByRole('textbox')
-    await phoneInput.fill('254700000000')
-    await page.getByRole('button',{name:'/Pay KES/i'}).click()
+    await phoneInput.fill('254707603209')
+    await page.getByRole('button',{name:'Pay KES'}).click()
 
     await expect(page.getByText('Payment initiated')).toBeVisible({timeout:15000})
 })
