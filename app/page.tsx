@@ -110,12 +110,12 @@ export default function Home() {
       </aside>
 
       <main className="flex-1">
-        <div className="mb-10">
-          <h1 className="text-5xl font-semibold tracking-tight mb-2">Bestsellers</h1>
-          <div className="text-sm text-gray-500 mb-8">Home • <span className="text-gray-300">Bestsellers</span></div>
+        <div className="mb-6 md:mb-10">
+          <h1 className="text-3xl md:text-5xl font-semibold tracking-tight mb-2">Bestsellers</h1>
+          <div className="text-xs md:text-sm text-gray-500 mb-6 md:mb-8">Home • <span className="text-gray-300">Bestsellers</span></div>
           
-          <div className="flex justify-between items-end border-b border-gray-800 pb-4">
-            <div className="flex gap-8 text-sm">
+          <div className="flex items-end border-b border-gray-800 pb-4 overflow-x-auto">
+            <div className="flex gap-6 md:gap-8 text-sm min-w-max">
               <button className="text-[#d4ff00] border-b-2 border-[#d4ff00] pb-4 -mb-[17px]">All items</button>
               <button className="text-gray-400 hover:text-white pb-4">Smartphones</button>
               <button className="text-gray-400 hover:text-white pb-4">Kitchen</button>
@@ -167,10 +167,10 @@ export default function Home() {
                   <p className="text-gray-400 text-sm line-clamp-2">{product.name}</p>
                 </div>
 
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl flex items-center justify-center backdrop-blur-sm">
+                <div className="mt-4 lg:mt-0 lg:absolute lg:inset-0 lg:bg-black/40 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity rounded-3xl flex items-center justify-center lg:backdrop-blur-sm">
                   <button 
                     onClick={(e) => { e.stopPropagation(); add(product); }}
-                    className="bg-[#d4ff00] text-black font-bold py-3 px-8 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all"
+                    className="w-full lg:w-auto bg-[#d4ff00] text-black font-bold py-3 px-8 rounded-xl lg:rounded-full shadow-lg transform lg:translate-y-4 lg:group-hover:translate-y-0 transition-all"
                   >
                     Add to Cart
                   </button>
