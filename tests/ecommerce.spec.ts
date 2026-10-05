@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test'
 
-// const FRONTEND_URL='https://commerce-frontend-seven.vercel.app'
-const FRONTEND_URL='https://localhost:3000'
+const FRONTEND_URL='https://commerce-frontend-seven.vercel.app'
+// const FRONTEND_URL='https://localhost:3000'
 
 const BACKEND_URL='https://mpesa-backend-pj42.onrender.com/api'
 
