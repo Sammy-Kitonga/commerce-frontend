@@ -149,7 +149,7 @@ export default function Home() {
                 
                 <div className="h-48 w-full flex items-center justify-center mb-6 relative">
                   {product.imageUrl ? (
-                    <img src={product.imageUrl} alt={product.name} className="max-h-full max-w-full object-contain drop-shadow-2xl" />
+                    <img src={product.imageURl} alt={product.name} className="max-h-full max-w-full object-contain drop-shadow-2xl" />
                   ) : (
                     <div className="text-gray-600">No image</div>
                   )}
