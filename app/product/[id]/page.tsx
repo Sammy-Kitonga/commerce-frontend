@@ -38,7 +38,6 @@ export default function ProductDetail() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-12">
-        {/* Product Image Area */}
         <div className="bg-white rounded-2xl overflow-hidden shadow-md aspect-square flex items-center justify-center bg-slate-100">
           {product.imageUrl ? (
             <img src={product.imageUrl} alt={product.name} className="object-cover w-full h-full" />
@@ -47,7 +46,6 @@ export default function ProductDetail() {
           )}
         </div>
 
-        {/* Product Details Area */}
         <div className="flex flex-col justify-center">
           <h1 className="text-4xl font-extrabold mb-4">{product.name}</h1>
           <p className="text-3xl font-bold text-blue-600 mb-6">KES {product.price}</p>
@@ -60,7 +58,6 @@ export default function ProductDetail() {
             <ShoppingCart /> Add to Cart
           </Button>
 
-          {/* Reviews Section */}
           <div className="mt-12 pt-8 border-t">
             <h3 className="text-2xl font-bold mb-6">Customer Reviews</h3>
             {product.reviews && product.reviews.length > 0 ? (
